@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_margin="20dp"
+    android:layout_height="match_parent">
+
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/name"
+            android:textSize="20sp"
+            android:text="Item Name"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter the Item Name"
+            android:layout_below="@+id/name"
+            android:background="#c5c2c2"
+            android:layout_marginTop="5dp"
+            android:gravity="center_horizontal|center_vertical"
+            android:id="@+id/itemname"/>
+
+    <TextView
+        android:id="@+id/secureDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/itemname"
+        android:layout_marginTop="20dp"
+        android:text="Secure Description"
+        android:textSize="20sp" />
+
+    <EditText
+        android:id="@+id/secureDescriptionET"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/secureDescription"
+        android:layout_marginTop="5dp"
+        android:background="#c5c2c2"
+        android:gravity="center_horizontal|center_vertical"
+        android:hint="Enter the secure Description" />
+
+    <TextView
+        android:id="@+id/desciption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/secureDescriptionET"
+        android:layout_marginTop="20dp"
+        android:text="Vissible Description"
+        android:textSize="20sp" />
+
+    <EditText
+        android:id="@+id/itemdescription"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_below="@+id/desciption"
+        android:layout_marginTop="5dp"
+        android:background="#c5c2c2"
+        android:gravity="center_horizontal|center_vertical"
+        android:hint="Enter the Vissible Description" />
+
+
+    <Button
+        android:id="@+id/AddTag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/itemdescription"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="35dp"
+        android:text="Add Tag" />
+
+    <EditText
+        android:id="@+id/number_of_tags"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal|center_vertical"
+        android:hint="Enter the number of Tags"
+        android:layout_alignTop="@+id/AddTag"
+        android:layout_alignParentStart="true"
+        android:maxLength="3"
+        android:ems="10"
+        android:inputType="numberSigned" />
+
+
+
+</RelativeLayout>
