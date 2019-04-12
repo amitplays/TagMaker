@@ -17,6 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.ams.tagmaker.Db.DataBaseHelper;
+import com.example.ams.tagmaker.Util.UtilTools;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
@@ -40,50 +41,38 @@ import static com.google.zxing.integration.android.IntentIntegrator.REQUEST_CODE
 
 public class AddTag extends Activity {
 
-
     DataBaseHelper db = new DataBaseHelper(AddTag.this);
+    UtilTools ut = new UtilTools();
     private int serial = 1, numberoftags;
+    EditText tagName ,tagDescription ,secureDescription ,numberOfTagsText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_tag);
-
-
         Button addTag = findViewById(R.id.AddTag);
-        final EditText tagName = findViewById(R.id.itemname);
-        final EditText tagDescription = findViewById(R.id.itemdescription);
-        final EditText secureDescription = findViewById(R.id.secureDescriptionET);
-        final EditText numberOfTagsText = findViewById(R.id.number_of_tags);
-
+        tagName = findViewById(R.id.itemname);
+        tagDescription = findViewById(R.id.itemdescription);
+        secureDescription = findViewById(R.id.secureDescriptionET);
+        numberOfTagsText = findViewById(R.id.number_of_tags);
         boolean chkPermission = checkPermission();
-
 
         if (chkPermission) {
 
             Toast.makeText(AddTag.this, "Already have storage permission", Toast.LENGTH_SHORT).show();
-
         } else {
-
             Toast.makeText(AddTag.this, "dnt have storage permission", Toast.LENGTH_SHORT).show();
-
         }
-
-        addTag.setOnClickListener(new View.OnClickListener() {
+         addTag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                numberoftags = Integer.parseInt(numberOfTagsText.getText().toString());
-
-
-                if (tagName.getText().toString() != null && tagDescription.getText().toString() != null && secureDescription.getText().toString() != null && numberoftags != 0) {
-
-
+                if (tagName.getText().toString() != null && tagDescription.getText().toString() != null  && numberoftags != 0) {
+                    numberoftags = Integer.parseInt(numberOfTagsText.getText().toString());
                     // Defining the Document for the pdf here :
                     Document document = new Document();
                     String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath();
                     try {
-                        PdfWriter.getInstance(document, new FileOutputStream(path + "/"+tagName.getText().toString()+"_BarCodes.pdf")); //  Change pdf's name.
+                        PdfWriter.getInstance(document, new FileOutputStream(path + "/"+tagName.getText().toString()+"_BarCodes"+ut.getDateTime()+".pdf")); //  Change pdf's name.
                     } catch (DocumentException e) {
                         e.printStackTrace();
                     } catch (FileNotFoundException e) {
@@ -92,45 +81,28 @@ public class AddTag extends Activity {
                     document.open();
 
                     for (int i = 1; i <= numberoftags; i++) {
-
-
                         db.createTagList(tagName.getText().toString().trim());
                         boolean result = db.insertTAG(serial, tagName.getText().toString(), tagDescription.getText().toString(), secureDescription.getText().toString());
-
+                        db.insertListName(serial, tagName.getText().toString());
                         if (result) {
-
-
-
-
-
                             Toast.makeText(AddTag.this, "Tag Successfully added", Toast.LENGTH_SHORT).show();
                             MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
                             try {
                                 BitMatrix bitMatrix = multiFormatWriter.encode(serial + " :" + tagName.getText().toString() + " : " + tagDescription.getText().toString(), BarcodeFormat.QR_CODE, 150, 150);
                                 BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
                                 Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
-
                                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
-
                                 bitmap.compress(Bitmap.CompressFormat.PNG, 50, bos);
                                 Image generatedBarcode = Image.getInstance(bos.toByteArray());
-
                                 float scaler = ((document.getPageSize().getWidth() - document.leftMargin()
-                                        - document.rightMargin() - 0) / generatedBarcode.getWidth()) * 100; // 0 means you have no indentation. If you have any, change it.
+                                        - document.rightMargin() - 0) / generatedBarcode.getWidth()) * 50; // 0 means you have no indentation. If you have any, change it.
                                 generatedBarcode.scalePercent(scaler);
                                 generatedBarcode.setAlignment(Image.ALIGN_CENTER | Image.ALIGN_TOP);
                                 document.add(new Paragraph("BarCode : "+serial + " from the List "+ tagName.getText().toString()));
-
                                 document.add(generatedBarcode);
 
                                 //---------------------------this ends here ------------------------
-
-
-
-
-
-
-
+                                tagAdded();
                             } catch (WriterException e) {
                                 e.printStackTrace();
                             } catch (IOException e) {
@@ -143,37 +115,26 @@ public class AddTag extends Activity {
                         }
                         serial++;
                     }
-
+                    tagAdded();
                     document.close();
-                    tagName.setText("");
-                    tagDescription.setText("");
-                    secureDescription.setText("");
 
-
-                    serial = 1;
                 } else {
-                    Toast.makeText(AddTag.this, "Tag not added", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddTag.this, "Complete all Fields", Toast.LENGTH_SHORT).show();
+                    ut.Dialog(AddTag.this,"Check Fields", "Maybe you left some necessary fields");
                 }
-
-
             }
 
 
         });
-
-
     }
 
     private boolean checkPermission() {
-
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED) {
                 Log.v(TAG, "Permission is granted");
                 return true;
             } else {
-
                 Log.v(TAG, "Permission is revoked");
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
                 return false;
@@ -182,6 +143,14 @@ public class AddTag extends Activity {
             Log.v(TAG, "Permission is granted");
             return true;
         }
-
     }
+    public void tagAdded(){
+        tagName.setText("");
+        tagDescription.setText("");
+        secureDescription.setText("");
+        numberOfTagsText.setText("");
+        serial = 1;
+        finish();
+    }
+
 }
