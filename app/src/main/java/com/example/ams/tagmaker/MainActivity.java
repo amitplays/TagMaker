@@ -14,6 +14,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Button Tags = findViewById(R.id.tags);
+        Button scan = findViewById(R.id.scanTags);
 
 
         Tags.setOnClickListener(new View.OnClickListener() {
@@ -25,6 +26,17 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        scan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(MainActivity.this, TagsList.class);
+                startActivity(intent);
+
+            }
+        });
+
 
 
     }

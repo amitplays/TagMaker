@@ -10,9 +10,6 @@ import java.util.Date;
 
 public class UtilTools {
 
-
-
-
     public String getDateTime(){
 
 

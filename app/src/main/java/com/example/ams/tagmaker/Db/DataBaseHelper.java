@@ -32,18 +32,31 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         this.myContext = context;
     }
 
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL("create table if not exists TagList (TagId INTEGER NOT NULL ,TagName TEXT ,TagDescription TEXT, SecureTagDescription TEXT, noOfTags INTEGER)");
+
+
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+    }
+
 
 
     // Insert Data in TagList
 
-    public boolean insertTAG(int tagID, String tagName,String tagDescription, String SecureTagDescription){
+    public boolean insertTAG(int tagID, String tagName,String tagDescription, String SecureTagDescription, int noOfTags){
         SQLiteDatabase db2 = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("TagId",tagID);
         contentValues.put("TagName",tagName);
         contentValues.put("TagDescription",tagDescription);
         contentValues.put("SecureTagDescription",SecureTagDescription);
-       long result = db2.insert(tagName, null , contentValues);
+        contentValues.put("noOfTags",noOfTags);
+       long result = db2.insert("TagList", null , contentValues);
 
         db2.close();
 
@@ -51,33 +64,14 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public boolean insertListName(int tagID, String tagName) {
-        SQLiteDatabase db2 = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("TagId", tagID);
-        contentValues.put("TagName", tagName);
-        long result = db2.insert("tagList", null, contentValues);
-
-        db2.close();
-
-        return result != -1;
-
-    }
-
-    public void createTagList(String TagListTableName){
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("create table if not exists "+ TagListTableName +" (TagId TEXT PRIMARY KEY NOT NULL ,TagName TEXT,TagDescription TEXT, SecureTagDescription TEXT)");
-
-    }
 
 
-    public List<TagListModel> getdata(String TABLE) {
+    public List<TagListModel> getTagDetails() {
 
         List<TagListModel> data = new ArrayList<>();
 
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery("select * from " + TABLE + " ;", null);
+        Cursor cursor = db.rawQuery("select * from TagList;", null);
         StringBuffer stringBuffer = new StringBuffer();
 
         TagListModel dataModel;
@@ -95,33 +89,31 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return data;
     }
 
-    public List<TagNameModel> getListName() {
-
-        List<TagNameModel> data = new ArrayList<>();
-
+    public Cursor getListOfTags() {
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery("select * from tagList ;", null);
-        StringBuffer stringBuffer = new StringBuffer();
-
-        TagNameModel dataModel = null;
-        while (cursor.moveToNext()) {
-            dataModel = new TagNameModel();
-            String TagName = cursor.getString(cursor.getColumnIndexOrThrow("TagName"));
-            dataModel.setTagName(TagName);
-            stringBuffer.append(dataModel);
-            data.add(dataModel);
-        }
-        return data;
+        Cursor cursor = db.rawQuery("SELECT DISTINCT TagName, noOfTags from TagList;", null);
+        return cursor;
     }
 
 
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table if not exists tagList (TagID INTEGER, TagName TEXT PRIMARY KEY NOT NULL )");
-    }
+//    public ArrayList<TagNameModel> getListOfTags() {
+//
+//        ArrayList<TagNameModel> data = new ArrayList<>();
+//
+//        SQLiteDatabase db = this.getWritableDatabase();
+//        Cursor cursor = db.rawQuery("SELECT DISTINCT TagName, noOfTags from TagList;", null);
+//        StringBuffer stringBuffer = new StringBuffer();
+//
+//        TagNameModel dataModel;
+//        while (cursor.moveToNext()) {
+//            dataModel = new TagNameModel();
+//            String TagName = cursor.getString(cursor.getColumnIndexOrThrow("TagName"));
+//            int NoofTags = Integer.parseInt(cursor.getString(cursor.getColumnIndexOrThrow("noOfTags")));
+//            dataModel.setTagName(TagName);
+//            dataModel.setNumbeOfTags(NoofTags);
+//            data.add(dataModel);
+//        }
+//        return data;
+//    }
 
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
-    }
 }

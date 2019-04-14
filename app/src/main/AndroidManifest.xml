@@ -19,6 +19,7 @@
         </activity>
 
         <activity android:name=".AddTag"/>
+        <activity android:name=".TagsList"/>
     </application>
 
 </manifest>

@@ -2,6 +2,7 @@ package com.example.ams.tagmaker;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Build;
@@ -43,7 +44,7 @@ public class AddTag extends Activity {
 
     DataBaseHelper db = new DataBaseHelper(AddTag.this);
     UtilTools ut = new UtilTools();
-    private int serial = 1, numberoftags;
+    private int serial = 1;
     EditText tagName ,tagDescription ,secureDescription ,numberOfTagsText;
 
     @Override
@@ -66,8 +67,16 @@ public class AddTag extends Activity {
          addTag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (tagName.getText().toString() != null && tagDescription.getText().toString() != null  && numberoftags != 0) {
-                    numberoftags = Integer.parseInt(numberOfTagsText.getText().toString());
+
+
+                String Name = tagName.getText().toString() ;
+                String Description = tagDescription.getText().toString() ;
+                String SecureDescription = secureDescription.getText().toString() ;
+                int noOfTags = Integer.parseInt(numberOfTagsText.getText().toString().trim());
+
+
+                if ( Name != null && Description != null  && noOfTags != 0) {
+
                     // Defining the Document for the pdf here :
                     Document document = new Document();
                     String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath();
@@ -79,30 +88,29 @@ public class AddTag extends Activity {
                         e.printStackTrace();
                     }
                     document.open();
+                    for (int i = 1; i < noOfTags; i++) {
 
-                    for (int i = 1; i <= numberoftags; i++) {
-                        db.createTagList(tagName.getText().toString().trim());
-                        boolean result = db.insertTAG(serial, tagName.getText().toString(), tagDescription.getText().toString(), secureDescription.getText().toString());
-                        db.insertListName(serial, tagName.getText().toString());
+                        boolean result = db.insertTAG(serial, Name, Description, SecureDescription,noOfTags);
                         if (result) {
                             Toast.makeText(AddTag.this, "Tag Successfully added", Toast.LENGTH_SHORT).show();
                             MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
                             try {
-                                BitMatrix bitMatrix = multiFormatWriter.encode(serial + " :" + tagName.getText().toString() + " : " + tagDescription.getText().toString(), BarcodeFormat.QR_CODE, 150, 150);
+                                BitMatrix bitMatrix = multiFormatWriter
+                                        .encode(serial + " :" + Name + " : " + Description, BarcodeFormat.QR_CODE, 100, 100);
                                 BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
                                 Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
                                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                                 bitmap.compress(Bitmap.CompressFormat.PNG, 50, bos);
                                 Image generatedBarcode = Image.getInstance(bos.toByteArray());
-                                float scaler = ((document.getPageSize().getWidth() - document.leftMargin()
-                                        - document.rightMargin() - 0) / generatedBarcode.getWidth()) * 50; // 0 means you have no indentation. If you have any, change it.
+                                float scaler = ((document.getPageSize()
+                                        .getWidth() - document.leftMargin() - document.rightMargin() - 0) / generatedBarcode.getWidth()) * 50; // 0 means you have no indentation. If you have any, change it.
                                 generatedBarcode.scalePercent(scaler);
                                 generatedBarcode.setAlignment(Image.ALIGN_CENTER | Image.ALIGN_TOP);
-                                document.add(new Paragraph("BarCode : "+serial + " from the List "+ tagName.getText().toString()));
+                                document.add(new Paragraph("BarCode : " + serial + " from the List " + Name));
                                 document.add(generatedBarcode);
 
-                                //---------------------------this ends here ------------------------
-                                tagAdded();
+                                //---------------------------inserting of current barcode to the document ends here ------------------------
+
                             } catch (WriterException e) {
                                 e.printStackTrace();
                             } catch (IOException e) {
@@ -112,14 +120,21 @@ public class AddTag extends Activity {
                             } catch (DocumentException e) {
                                 e.printStackTrace();
                             }
+                        } else {
+
+
+                            ut.Dialog(AddTag.this, "Check Fields", "Tag was not added to the database");
+
+
                         }
                         serial++;
                     }
-                    tagAdded();
                     document.close();
+                    Intent intent = new Intent(AddTag.this, TagsList.class);
+                    startActivity(intent);
 
                 } else {
-                    Toast.makeText(AddTag.this, "Complete all Fields", Toast.LENGTH_SHORT).show();
+
                     ut.Dialog(AddTag.this,"Check Fields", "Maybe you left some necessary fields");
                 }
             }
@@ -144,13 +159,6 @@ public class AddTag extends Activity {
             return true;
         }
     }
-    public void tagAdded(){
-        tagName.setText("");
-        tagDescription.setText("");
-        secureDescription.setText("");
-        numberOfTagsText.setText("");
-        serial = 1;
-        finish();
-    }
+
 
 }

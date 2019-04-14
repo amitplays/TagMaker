@@ -1,55 +1,90 @@
 package com.example.ams.tagmaker.Adapter;
 
+import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.ams.tagmaker.Db.DataBaseHelper;
+import com.example.ams.tagmaker.Models.TagListModel;
+import com.example.ams.tagmaker.Models.TagNameModel;
 import com.example.ams.tagmaker.R;
+import com.example.ams.tagmaker.TagsList;
 
-public class ListAdapter extends  RecyclerView.Adapter<ListAdapter.MyViewHolder> {
-private String[] mDataset;
+import java.util.ArrayList;
 
-// Provide a reference to the views for each data item
-// Complex data items may need more than one view per item, and
-// you provide access to all the views for a data item in a view holder
-public static class MyViewHolder extends RecyclerView.ViewHolder {
-    // each data item is just a string in this case
-    public TextView textView;
-    public MyViewHolder(TextView v) {
-        super(v);
-        textView = v;
-    }
-}
+public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> {
+    Context context;
+    ArrayList<TagNameModel> mDataset;
 
-    // Provide a suitable constructor (depends on the kind of dataset)
-    public ListAdapter(String[] myDataset) {
-        mDataset = myDataset;
+    public ListAdapter(Context context, ArrayList<TagNameModel> datamodel) {
+        this.context = context;
+        mDataset = datamodel;
+
     }
 
-    // Create new views (invoked by the layout manager)
+
+    @NonNull
     @Override
-    public ListAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent,
-                                                     int viewType) {
+    public ListAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
         // create a new view
-        TextView v = (TextView) LayoutInflater.from(parent.getContext())
+        View view =  LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.taglist_layout, parent, false);
-        MyViewHolder vh = new MyViewHolder(v);
-        return vh;
+        MyViewHolder myviewholder = new MyViewHolder(view);
+
+        // use this setting to improve performance if you know that changes
+        // use a linear layout manager
+
+
+
+        return myviewholder;
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
-        holder.textView.setText(mDataset[position]);
-
+    public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
+        TagNameModel tnm = mDataset.get(i);
+        myViewHolder.name.setText(tnm.getTagName());
+        myViewHolder.noOfTags.setText(String.valueOf(tnm.getNumbeOfTags()));
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
+
     @Override
     public int getItemCount() {
-        return mDataset.length;
+
+        if (mDataset !=null){
+
+
+            return mDataset.size();
+        }else {
+            return 0;
+        }
+        }
+
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
+
+       public final TextView name, noOfTags;
+
+        // each data item is just a string in this case
+        public View view;
+        public MyViewHolder(View v) {
+
+            super(v);
+            this.view = v;
+            name =  v.findViewById((R.id.nameofLayoutTextView));
+            noOfTags = v.findViewById(R.id.noOfTagsLayoutTextView);
+
+        }
     }
+
+
+
+
 }
+
+
+

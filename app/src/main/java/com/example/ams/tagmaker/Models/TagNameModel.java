@@ -3,8 +3,7 @@ package com.example.ams.tagmaker.Models;
 public class TagNameModel {
 
 
-    String TagName,  numbeOfTags;
-
+    String TagName; int numbeOfTags;
 
     public String getTagName() {
         return TagName;
@@ -14,12 +13,11 @@ public class TagNameModel {
         TagName = tagName;
     }
 
-    public String getNumbeOfTags() {
+    public int getNumbeOfTags() {
         return numbeOfTags;
     }
 
-    public void setNumbeOfTags(String numbeOfTags) {
+    public void setNumbeOfTags(int numbeOfTags) {
         this.numbeOfTags = numbeOfTags;
     }
-
 }
