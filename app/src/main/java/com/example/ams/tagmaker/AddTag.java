@@ -24,8 +24,11 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.itextpdf.text.BadElementException;
+import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -88,25 +91,36 @@ public class AddTag extends Activity {
                         e.printStackTrace();
                     }
                     document.open();
+
+
+                    Paragraph p1 = new Paragraph("TagMaker Application");
+                    Font paraFont= new Font(Font.FontFamily.COURIER);
+                    p1.setAlignment(Paragraph.ALIGN_CENTER);
+                    p1.setFont(paraFont);
+                    try {
+                        document.add(p1);
+                    } catch (DocumentException e) {
+                        e.printStackTrace();
+                    }
+
+
                     for (int i = 1; i < noOfTags; i++) {
 
                         boolean result = db.insertTAG(serial, Name, Description, SecureDescription,noOfTags);
                         if (result) {
-                            Toast.makeText(AddTag.this, "Tag Successfully added", Toast.LENGTH_SHORT).show();
                             MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
                             try {
                                 BitMatrix bitMatrix = multiFormatWriter
-                                        .encode(serial + " :" + Name + " : " + Description, BarcodeFormat.QR_CODE, 100, 100);
+                                        .encode(serial + " :" + Name + " : " + Description, BarcodeFormat.QR_CODE, 80, 80);
                                 BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
                                 Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
                                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                                 bitmap.compress(Bitmap.CompressFormat.PNG, 50, bos);
                                 Image generatedBarcode = Image.getInstance(bos.toByteArray());
                                 float scaler = ((document.getPageSize()
-                                        .getWidth() - document.leftMargin() - document.rightMargin() - 0) / generatedBarcode.getWidth()) * 50; // 0 means you have no indentation. If you have any, change it.
+                                        .getWidth() - document.leftMargin() - document.rightMargin() - 0) / generatedBarcode.getWidth()) * 40; // 0 means you have no indentation. If you have any, change it.
                                 generatedBarcode.scalePercent(scaler);
                                 generatedBarcode.setAlignment(Image.ALIGN_CENTER | Image.ALIGN_TOP);
-                                document.add(new Paragraph("BarCode : " + serial + " from the List " + Name));
                                 document.add(generatedBarcode);
 
                                 //---------------------------inserting of current barcode to the document ends here ------------------------

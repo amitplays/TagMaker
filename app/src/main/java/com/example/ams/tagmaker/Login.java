@@ -8,8 +8,11 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-public class Login extends Activity {
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
+public class Login extends Activity {
+    private FirebaseAuth mAuth;
 
     Button SignUp;
     TextView skip;
@@ -20,6 +23,8 @@ public class Login extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
 
+        // Initialize Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
         SignUp = findViewById(R.id.signUpBtn);
         skip = findViewById(R.id.skip);
 
@@ -40,6 +45,15 @@ public class Login extends Activity {
             }
         });
 
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        //    updateUI(currentUser);
     }
 
 
