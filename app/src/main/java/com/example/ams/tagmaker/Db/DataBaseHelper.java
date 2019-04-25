@@ -28,13 +28,15 @@ public class DataBaseHelper extends SQLiteOpenHelper {
      */
     public DataBaseHelper(Context context) {
 
-        super(context, DB_NAME, null, 2);
+        super(context, DB_NAME, null, 4);
         this.myContext = context;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table if not exists TagList (TagId INTEGER NOT NULL ,TagName TEXT ,TagDescription TEXT, SecureTagDescription TEXT, noOfTags INTEGER)");
+        db.execSQL("create table if not exists User (UserName TEXT ,UserEmail TEXT NOT NULL, UserPassword TEXT)");
+        db.execSQL("create table if not exists current (UserEmail TEXT NOT NULL)");
 
 
     }
@@ -57,12 +59,46 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         contentValues.put("SecureTagDescription",SecureTagDescription);
         contentValues.put("noOfTags",noOfTags);
        long result = db2.insert("TagList", null , contentValues);
-
         db2.close();
-
         return result != -1;
-
     }
+
+
+    // Insert CurrentUser in current
+
+    public boolean AddCurrentUser(String email){
+        SQLiteDatabase db2 = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("UserEmail",email);
+
+        long result = db2.insert("current", null , contentValues);
+        db2.close();
+        return result != -1;
+    }
+
+
+    public Cursor login(String username){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+      Cursor x = db.rawQuery("SELECT UserPassword FROM User WHERE UserEmail='"+username+"'", null);
+
+   return x;
+    }
+
+
+    // Insert User
+
+    public boolean insertUser( String UserName,String UserEmail, String UserPassword){
+        SQLiteDatabase db2 = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("UserName",UserName);
+        contentValues.put("UserEmail",UserEmail);
+        contentValues.put("UserPassword",UserPassword);
+        long result = db2.insert("User", null , contentValues);
+        db2.close();
+        return result != -1;
+    }
+
 
 
 
@@ -86,6 +122,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             stringBuffer.append(dataModel);
             data.add(dataModel);
         }
+        db.close();
         return data;
     }
 

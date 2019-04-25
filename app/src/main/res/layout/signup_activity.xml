@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_margin="10dp"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:id="@+id/heading"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="Sign-up"
+        android:textColor="#000"
+        android:textSize="35sp" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="100dp"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:text="Name"
+            android:textColor="#000"
+            android:textSize="25sp" />
+
+        <EditText
+            android:id="@+id/username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/name"
+            android:layout_marginTop="5dp"
+            android:height="50dp"
+            android:background="@drawable/round"
+            android:gravity="center_horizontal|center_vertical"
+            android:hint="Enter the Name" />
+
+        <TextView
+            android:id="@+id/secureDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/username"
+            android:layout_marginTop="15dp"
+            android:text="Email"
+            android:textColor="#000"
+            android:textSize="25sp" />
+
+        <EditText
+            android:id="@+id/emailET"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/secureDescription"
+            android:layout_marginTop="5dp"
+            android:height="50dp"
+            android:background="@drawable/round"
+            android:gravity="center_horizontal|center_vertical"
+            android:hint="Enter the email" />
+
+        <TextView
+            android:id="@+id/desciption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/emailET"
+            android:layout_marginTop="15dp"
+            android:text="Password"
+            android:textColor="#000"
+            android:textSize="25sp" />
+
+        <EditText
+            android:id="@+id/passwordET"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@+id/desciption"
+            android:layout_marginTop="5dp"
+            android:height="50dp"
+            android:background="@drawable/round"
+            android:gravity="center_horizontal|center_vertical"
+            android:hint="Enter the Password" />
+
+
+        <Button
+            android:id="@+id/AddUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/passwordET"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp"
+            android:layout_marginRight="20dp"
+            android:width="250dp"
+            android:background="@drawable/round"
+            android:text="Create Account"
+            android:textColor="#2196F3"
+            android:textSize="20sp" />
+
+    </RelativeLayout>
+</RelativeLayout>

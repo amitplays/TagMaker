@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -15,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ams.tagmaker.Db.DataBaseHelper;
@@ -53,7 +55,12 @@ public class AddTag extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.add_tag);
+        TextView heading = findViewById(R.id.heading);
+        Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/fontBold.ttf");
+        heading.setTypeface(typeface);
+
         Button addTag = findViewById(R.id.AddTag);
         tagName = findViewById(R.id.itemname);
         tagDescription = findViewById(R.id.itemdescription);
@@ -92,7 +99,6 @@ public class AddTag extends Activity {
                     }
                     document.open();
 
-
                     Paragraph p1 = new Paragraph("TagMaker Application");
                     Font paraFont= new Font(Font.FontFamily.COURIER);
                     p1.setAlignment(Paragraph.ALIGN_CENTER);
@@ -103,9 +109,7 @@ public class AddTag extends Activity {
                         e.printStackTrace();
                     }
 
-
                     for (int i = 1; i < noOfTags; i++) {
-
                         boolean result = db.insertTAG(serial, Name, Description, SecureDescription,noOfTags);
                         if (result) {
                             MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
@@ -117,12 +121,12 @@ public class AddTag extends Activity {
                                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                                 bitmap.compress(Bitmap.CompressFormat.PNG, 50, bos);
                                 Image generatedBarcode = Image.getInstance(bos.toByteArray());
+
                                 float scaler = ((document.getPageSize()
                                         .getWidth() - document.leftMargin() - document.rightMargin() - 0) / generatedBarcode.getWidth()) * 40; // 0 means you have no indentation. If you have any, change it.
                                 generatedBarcode.scalePercent(scaler);
                                 generatedBarcode.setAlignment(Image.ALIGN_CENTER | Image.ALIGN_TOP);
                                 document.add(generatedBarcode);
-
                                 //---------------------------inserting of current barcode to the document ends here ------------------------
 
                             } catch (WriterException e) {
@@ -136,10 +140,7 @@ public class AddTag extends Activity {
                             }
                         } else {
 
-
                             ut.Dialog(AddTag.this, "Check Fields", "Tag was not added to the database");
-
-
                         }
                         serial++;
                     }
@@ -152,8 +153,6 @@ public class AddTag extends Activity {
                     ut.Dialog(AddTag.this,"Check Fields", "Maybe you left some necessary fields");
                 }
             }
-
-
         });
     }
 

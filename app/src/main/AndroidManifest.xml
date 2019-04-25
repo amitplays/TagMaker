@@ -3,6 +3,7 @@
     package="com.example.ams.tagmaker">
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <application
         android:allowBackup="true"
@@ -11,7 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Login">
+        <activity android:name=".SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,7 +22,12 @@
 
         <activity android:name=".AddTag"/>
         <activity android:name=".TagsList"/>
-        <activity android:name=".MainActivity"/>
+        <activity android:name=".ScanTag"/>
+        <activity android:name=".Login"/>
+        <activity android:name=".ScanActivity"/>
+        <activity android:name=".MainActivity"
+            android:noHistory="true"/>
+        <activity android:name=".SignUp" />
     </application>
 
 </manifest>

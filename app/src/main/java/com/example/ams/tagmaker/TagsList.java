@@ -2,9 +2,11 @@ package com.example.ams.tagmaker;
 
 import android.app.Activity;
 import android.database.Cursor;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.TextView;
 
 import com.example.ams.tagmaker.Adapter.ListAdapter;
 import com.example.ams.tagmaker.Db.DataBaseHelper;
@@ -28,6 +30,9 @@ public class TagsList extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tags_list);
+        TextView heading = findViewById(R.id.heading);
+        Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/fontBold.ttf");
+        heading.setTypeface(typeface);
 
         recyclerView = findViewById(R.id.taglist);
       getdata();

@@ -1,11 +1,18 @@
 package com.example.ams.tagmaker;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+
+import static android.content.ContentValues.TAG;
 
 public class SplashScreen extends Activity {
 
@@ -15,16 +22,8 @@ public class SplashScreen extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen);
-        final ImageView logo = (ImageView) findViewById(R.id.imageView18);
 
-
-
-
-        Animation expandIn = AnimationUtils.loadAnimation(this, R.anim.pop_up);
-        logo.startAnimation(expandIn);
-
-
-
+checkPermission();
 
         Thread timerThread = new Thread() {
             public void run() {
@@ -45,4 +44,23 @@ public class SplashScreen extends Activity {
         };
         timerThread.start();
     }
+
+
+    private boolean checkPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.INTERNET)
+                    == PackageManager.PERMISSION_GRANTED) {
+                Log.v(TAG, "Internet  Permission is granted");
+                return true;
+            } else {
+                Log.v(TAG, "internet Permission is revoked");
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET}, 1);
+                return false;
+            }
+        } else { //permission is automatically granted on sdk<23 upon installation
+            Log.v(TAG, "Automatically granted is granted");
+            return true;
+        }
+    }
+
 }
