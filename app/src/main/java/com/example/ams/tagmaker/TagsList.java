@@ -1,11 +1,13 @@
 package com.example.ams.tagmaker;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.TextView;
 
 import com.example.ams.tagmaker.Adapter.ListAdapter;
@@ -15,6 +17,8 @@ import com.example.ams.tagmaker.Models.TagNameModel;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.google.zxing.integration.android.IntentIntegrator.REQUEST_CODE;
 
 public class TagsList extends Activity {
 
@@ -40,6 +44,18 @@ public class TagsList extends Activity {
         recyclerView.setLayoutManager(layoutManager);
         recycler = new ListAdapter(TagsList.this, data);
         recyclerView.setAdapter(recycler);
+
+        recyclerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("*/*");
+                startActivityForResult(intent, REQUEST_CODE);
+            }
+        });
+
+
 
 
     }

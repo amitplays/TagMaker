@@ -28,7 +28,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
      */
     public DataBaseHelper(Context context) {
 
-        super(context, DB_NAME, null, 4);
+        super(context, DB_NAME, null, 5);
         this.myContext = context;
     }
 
@@ -132,25 +132,5 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
-
-//    public ArrayList<TagNameModel> getListOfTags() {
-//
-//        ArrayList<TagNameModel> data = new ArrayList<>();
-//
-//        SQLiteDatabase db = this.getWritableDatabase();
-//        Cursor cursor = db.rawQuery("SELECT DISTINCT TagName, noOfTags from TagList;", null);
-//        StringBuffer stringBuffer = new StringBuffer();
-//
-//        TagNameModel dataModel;
-//        while (cursor.moveToNext()) {
-//            dataModel = new TagNameModel();
-//            String TagName = cursor.getString(cursor.getColumnIndexOrThrow("TagName"));
-//            int NoofTags = Integer.parseInt(cursor.getString(cursor.getColumnIndexOrThrow("noOfTags")));
-//            dataModel.setTagName(TagName);
-//            dataModel.setNumbeOfTags(NoofTags);
-//            data.add(dataModel);
-//        }
-//        return data;
-//    }
 
 }

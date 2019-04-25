@@ -109,7 +109,7 @@ public class AddTag extends Activity {
                         e.printStackTrace();
                     }
 
-                    for (int i = 1; i < noOfTags; i++) {
+                    for (int i = 0; i < noOfTags; i++) {
                         boolean result = db.insertTAG(serial, Name, Description, SecureDescription,noOfTags);
                         if (result) {
                             MultiFormatWriter multiFormatWriter = new MultiFormatWriter();

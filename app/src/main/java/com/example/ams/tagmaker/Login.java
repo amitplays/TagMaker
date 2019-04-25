@@ -32,7 +32,6 @@ public class Login extends Activity {
     ImageView logo;
     EditText username, password;
     static String currentUser = null;
-    private ProgressBar progress_bar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,19 +86,17 @@ public class Login extends Activity {
                         if ( password.getText().toString().equals(x.getString(x.getColumnIndexOrThrow("UserPassword")))){
                             Toast.makeText(Login.this,"Login Successful !",Toast.LENGTH_LONG).show();
 
-                            Intent start = new Intent(Login.this,MainActivity.class);
-                            currentUser = username.getText().toString();
-                            startActivity(start);
-                            start.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
-                            username.setText("");
-                            password.setText("");
-                            break;
+                                Intent start = new Intent(Login.this, MainActivity.class);
+                                currentUser = username.getText().toString();
+                                startActivity(start);
+                                username.setText("");
+                                password.setText("");
+                                break;
 
                         }else {
 
                             Toast.makeText(Login.this,"Invalid Login Details PLease Try Again Later !",Toast.LENGTH_LONG).show();
-
+                                break;
 
                         }
 
@@ -128,7 +125,7 @@ public class Login extends Activity {
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         //    updateUI(currentUser);
-        Toast.makeText(this,"Firebase onStart",Toast.LENGTH_LONG).show();
+
     }
 
 

@@ -1,6 +1,7 @@
 package com.example.ams.tagmaker.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +18,9 @@ import com.example.ams.tagmaker.R;
 import com.example.ams.tagmaker.TagsList;
 
 import java.util.ArrayList;
+
+import static android.support.v4.app.ActivityCompat.startActivityForResult;
+import static com.google.zxing.integration.android.IntentIntegrator.REQUEST_CODE;
 
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> {
     Context context;
@@ -39,9 +43,6 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> 
 
         // use this setting to improve performance if you know that changes
         // use a linear layout manager
-
-
-
         return myviewholder;
     }
 
@@ -50,6 +51,18 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> 
         TagNameModel tnm = mDataset.get(i);
         myViewHolder.name.setText(tnm.getTagName());
         myViewHolder.noOfTags.setText(String.valueOf(tnm.getNumbeOfTags()));
+
+        myViewHolder.view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("*/*");
+                context.startActivity(intent);
+
+            }
+        });
     }
 
 
